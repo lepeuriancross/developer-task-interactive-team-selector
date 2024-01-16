@@ -1,0 +1,24 @@
+// Styles: Embla Carousel
+/*----------------------------------------------------------------------------------------------------*/
+
+.embla {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+
+	&__container {
+		display: flex;
+	}
+
+	&__slide {
+		// relative w-full
+		position: relative;
+		flex: 0 0 100%;
+		width: 100%;
+		min-width: 0;
+	}
+}

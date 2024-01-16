@@ -34,7 +34,7 @@ export default function PageHome() {
 	// Return default
 	return (
 		<main
-			className="page flex min-h-screen flex-col items-center justify-between bg-black text-white"
+			className="page flex flex-col items-center justify-between min-h-screen bg-black text-white"
 			data-name={name}
 		>
 			{/* Section Array */}

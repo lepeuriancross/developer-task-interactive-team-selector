@@ -212,6 +212,7 @@ export default function CarouselCards(props: CarouselCardsProps) {
 						</span>
 						<span className="carousel__dropdown-button-icon w-[16px] h-[8px]">
 							<Image
+								className="carousel__dropdown-button-icon-img"
 								src={imgIconChevron.src}
 								width={imgIconChevron.width}
 								height={imgIconChevron.height}
@@ -233,7 +234,7 @@ export default function CarouselCards(props: CarouselCardsProps) {
 									`carousel__button border rounded-[8px] px-3 pt-1 font-light text-[20px] leading-[27px] transition-colors duration-300 ease-out`,
 									c === cardCurrent
 										? `bg-blue border-blue text-white`
-										: 'bg-transparent border-gray text-gray lg:hover:bg-blue lg:hover:border-blue lg:hover:text-white'
+										: 'is-active bg-transparent border-gray text-gray lg:hover:bg-blue lg:hover:border-blue lg:hover:text-white'
 								)}
 								type="button"
 								onClick={() => selectItem(c)}
@@ -389,7 +390,7 @@ export function CarouselCardsCard(props: CarouselCardsCardProps) {
 								{image && (
 									<Image
 										className={classNames(
-											`card__image-img absolute z-20 top-0 left-0 transform w-full h-full transitton-transform duration-500 ease-in-out object-cover`,
+											`card__image-img absolute z-20 top-0 left-0 transform w-full h-full transition-transform duration-500 ease-in-out object-cover`,
 											video && 'lg:group-hover:scale-110'
 										)}
 										src={image}
@@ -400,14 +401,14 @@ export function CarouselCardsCard(props: CarouselCardsCardProps) {
 								)}
 								{video && (
 									<button
-										className="button absolute z-30 top-0 left-0 flex justify-center items-center w-full h-full font-button font-normal cursor-pointer"
+										className="card__playbutton absolute z-30 top-0 left-0 flex justify-center items-center w-full h-full font-button font-normal cursor-pointer"
 										type="button"
 										onClick={() => onClickVideo(video.src)}
 									>
-										<div className="button__button-container inline-flex justify-center items-center">
-											<div className="card__button-icon relative z-20 transform rounded-full shadow-lg lg:-mr-3 bg-black/10">
+										<div className="card__playbutton-container inline-flex justify-center items-center">
+											<div className="card__playbutton-icon relative z-20 transform rounded-full shadow-lg lg:-mr-3 bg-black/10">
 												<Image
-													className="carousel__button-icon-img w-[34px] h-[34px] lg:w-[70px] lg:h-[70px]"
+													className="card__playbutton-icon-img w-[34px] h-[34px] lg:w-[70px] lg:h-[70px]"
 													src={imgIconPlay.src}
 													width={imgIconPlay.width}
 													height={imgIconPlay.height}
@@ -415,7 +416,7 @@ export function CarouselCardsCard(props: CarouselCardsCardProps) {
 													aria-hidden="true"
 												/>
 											</div>
-											<div className="card__button-text relative z-10 hidden rounded-r-[8px] px-6 py-4 backdrop-blur-lg lg:inline-block text-white bg-white/10">
+											<div className="card__playbutton-text relative z-10 hidden rounded-r-[8px] px-6 py-4 backdrop-blur-lg lg:inline-block text-white bg-white/10">
 												{video.name ?? 'Watch video'}
 											</div>
 										</div>
@@ -424,7 +425,7 @@ export function CarouselCardsCard(props: CarouselCardsCardProps) {
 							</div>
 						</div>
 					</div>
-					<div className="card__row gradient-background w-full h-[6px]" />
+					<div className="card__strip gradient-background w-full h-[6px]" />
 				</div>
 			</article>
 		</>
@@ -450,7 +451,7 @@ export function CarouselCardsDropdown(props: CarouselCardsDropdownProps) {
 	return (
 		<div
 			className={classNames(
-				`dropdown__menu fixed z-50 top-0 left-0 flex flex-col justify-end w-full h-screen`,
+				`dropdown fixed z-50 top-0 left-0 flex flex-col justify-end w-full h-screen`,
 				isActive ? 'is-active' : 'pointer-events-none',
 				className
 			)}
@@ -470,7 +471,9 @@ export function CarouselCardsDropdown(props: CarouselCardsDropdownProps) {
 				transition={{ duration: 0.3, ease: 'easeOut' }}
 			>
 				<div className="dropdown__menu-heading flex justify-between items-end border-b pb-4 border-gray">
-					<h3 className="font-title font-normal text-[20px]">{title}</h3>
+					<h3 className="dropdown__menu-heading-title font-title font-normal text-[20px]">
+						{title}
+					</h3>
 					<button
 						className="dropdown__menu-close relative w-[42px] h-[42px] rounded-[8px] bg-gray/30"
 						onClick={onClickClose}
@@ -546,6 +549,23 @@ export function CarouselCardsOverlay(props: CarouselCardsOverlayProps) {
 					}}
 				/>
 			</motion.div>
+			<motion.button
+				className="overlay__close absolute z-30 top-6 right-6 w-[42px] h-[42px] rounded-[8px] lg:top-8 lg:right-8 bg-gray/30"
+				initial={{ opacity: 0 }}
+				animate={{ opacity: isActive && src ? 1 : 0 }}
+				transition={{ duration: 0.3, ease: 'easeOut' }}
+				onClick={onClickClose}
+			>
+				<span className="sr-only">Close dropdown</span>
+				<Image
+					className="overlay__close-img absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+					src={imgIconClose.src}
+					width={imgIconClose.width}
+					height={imgIconClose.height}
+					alt=""
+					aria-hidden="true"
+				/>
+			</motion.button>
 		</div>
 	);
 }

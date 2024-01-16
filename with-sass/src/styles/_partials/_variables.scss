@@ -1,0 +1,30 @@
+// Styles: Globals
+/*----------------------------------------------------------------------------------------------------*/
+
+/*---------- Break Points ----------*/
+
+$breakSm: 640px;
+$breakMd: 768px;
+$breakLg: 1024px;
+$breakXl: 1280px;
+$break2xl: 1536px;
+
+/*---------- Colors ----------*/
+
+$colorBlack: #000000;
+$colorGray: #4a4a4a;
+$colorGrayLight: #f7f5f9;
+$colorWhite: #ffffff;
+$colorOrange: #ff7800;
+$colorRed: #f80032;
+$colorPink: #ff00a0;
+$colorPurple: #8c28ff;
+$colorBlue: #000ff5;
+$colorBlueLight: #1798ff;
+
+/*---------- Fonts ----------*/
+
+$fontTitle: var(--font-sky);
+$fontSubtitle: var(--font-sky);
+$fontBody: var(--font-sky);
+$fontButton: var(--font-sky);

@@ -22,7 +22,6 @@ import '@/styles/globals.scss';
 /*---------- Static Data ----------*/
 
 // Fonts
-const inter = Inter({ subsets: ['latin'] });
 const sky = localFont({
 	src: [
 		{
@@ -51,6 +50,7 @@ const sky = localFont({
 			style: 'normal',
 		},
 	],
+	variable: '--font-sky',
 });
 
 // Metadata
@@ -72,8 +72,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
 		<html lang="en">
 			<body
 				className={classNames(
-					`layout font-light text-[16px] leading-[24px] text-center`,
-					sky.className
+					`layout font-body font-light text-[16px] leading-[24px] text-center`,
+					sky.variable
 				)}
 			>
 				{children}
