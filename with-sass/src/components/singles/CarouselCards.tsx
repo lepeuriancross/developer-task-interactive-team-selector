@@ -6,7 +6,7 @@
 /*---------- Imports ----------*/
 
 // Config
-// ...
+import { configVideo } from '@/data/config';
 
 // Scripts (node)
 import { useRef, useState, useCallback, useEffect } from 'react';
@@ -60,6 +60,7 @@ export type CarouselCardsCardProps = {
 	};
 	className?: string;
 	onClickVideo?: (src: string) => void;
+	onCloseVideo?: () => void;
 };
 export type CarouselCardsDropdownProps = {
 	isActive?: boolean;
@@ -97,9 +98,9 @@ export default function CarouselCards(props: CarouselCardsProps) {
 	// State - dropdownShow
 	const [dropdownShow, setDropdownShow] = useState<boolean>(false);
 
-	// State - overlayShow
-	const [overlayShow, setOverlayShow] = useState<boolean>(false);
-	const [overlaySrc, setOverlaySrc] = useState<string | undefined>();
+	// State - videoShow
+	const [videoShow, setVideoShow] = useState<boolean>(false);
+	const [videoSrc, setVideoSrc] = useState<string | undefined>();
 
 	/*----- Methods -----*/
 
@@ -142,19 +143,19 @@ export default function CarouselCards(props: CarouselCardsProps) {
 		setDropdownShow(false);
 	};
 
-	// Method - openOverlay
-	const openOverlay = (src: string) => {
-		// Set overlaySrc
-		setOverlaySrc(src);
+	// Method - openVideo
+	const openVideo = (src: string) => {
+		// Set videoSrc
+		setVideoSrc(src);
 
-		// Set overlayShow
-		setOverlayShow(true);
+		// Set videoShow
+		setVideoShow(true);
 	};
 
-	// Method - closeOverlay
-	const closeOverlay = () => {
-		// Set overlayShow
-		setOverlayShow(false);
+	// Method - closeVideo
+	const closeVideo = () => {
+		// Set videoShow
+		setVideoShow(false);
 	};
 
 	/*----- Lifecycle -----*/
@@ -177,17 +178,23 @@ export default function CarouselCards(props: CarouselCardsProps) {
 		return () => window.removeEventListener('resize', handleResize);
 	}, []);
 
-	// Watch - dropdownShow, overlayShow
+	// Watch - dropdownShow, videoShow
 	useEffect(() => {
-		// If dropdownShow or overlayShow
-		if (dropdownShow || overlayShow) {
+		// If dropdownShow or videoShow
+		if (!configVideo.playsInline && (dropdownShow || videoShow)) {
 			// Set body style
 			document.body.style.overflow = 'hidden';
 		} else {
 			// Set body style
 			document.body.style.overflow = 'auto';
 		}
-	}, [dropdownShow, overlayShow]);
+	}, [dropdownShow, videoShow]);
+
+	// Watch - cardCurrent
+	useEffect(() => {
+		// Set videoShow
+		setVideoShow(false);
+	}, [cardCurrent]);
 
 	/*----- Init -----*/
 
@@ -261,9 +268,13 @@ export default function CarouselCards(props: CarouselCardsProps) {
 							{cards.map((card, c) => (
 								<CarouselCardsCard
 									{...card}
-									className={classNames(cardCurrent === c && `is-active`)}
+									className={classNames(
+										cardCurrent === c && `is-active`,
+										videoShow && `show-video`
+									)}
 									key={`carousel-teams-card-${card.id}`}
-									onClickVideo={openOverlay}
+									onClickVideo={openVideo}
+									onCloseVideo={closeVideo}
 								/>
 							))}
 						</EmblaCarousel>
@@ -295,11 +306,13 @@ export default function CarouselCards(props: CarouselCardsProps) {
 					))}
 				</ul>
 			</CarouselCardsDropdown>
-			<CarouselCardsOverlay
-				isActive={overlayShow}
-				src={overlaySrc}
-				onClickClose={closeOverlay}
-			/>
+			{!configVideo.playsInline && (
+				<CarouselCardsOverlay
+					isActive={videoShow}
+					src={videoSrc}
+					onClickClose={closeVideo}
+				/>
+			)}
 		</>
 	);
 }
@@ -320,12 +333,21 @@ export function CarouselCardsCard(props: CarouselCardsCardProps) {
 		video,
 		className,
 		onClickVideo = (src: string) => {},
+		onCloseVideo = () => {},
 	} = props;
+
+	/*----- Refs -----*/
+
+	// Ref - imageColEl
+	const imageColEl = useRef<any>(null);
 
 	/*----- Store -----*/
 
 	// State - isActive
 	const [isActive, setIsActive] = useState<boolean>(false);
+
+	// State - showVideo
+	const [showVideo, setShowVideo] = useState<boolean>(false);
 
 	/*----- Lifecycle -----*/
 
@@ -333,6 +355,9 @@ export function CarouselCardsCard(props: CarouselCardsCardProps) {
 	useEffect(() => {
 		// Set isActive
 		setIsActive(className && className.includes('is-active') ? true : false);
+
+		// Set showVideo
+		setShowVideo(className && className.includes('show-video') ? true : false);
 	}, [className]);
 
 	/*----- Init -----*/
@@ -374,13 +399,13 @@ export function CarouselCardsCard(props: CarouselCardsCardProps) {
 								</div>
 							)}
 						</div>
-						<div className="card__col--image">
+						<div ref={imageColEl} className="card__col--image">
 							<div className="card__image">
 								{image && (
 									<Image
 										className={classNames(
 											`card__image-img`,
-											video && 'is-video'
+											video && !(isActive && showVideo) && 'is-video'
 										)}
 										src={image}
 										width={1920}
@@ -410,6 +435,60 @@ export function CarouselCardsCard(props: CarouselCardsCardProps) {
 											</div>
 										</div>
 									</button>
+								)}
+								{configVideo.playsInline && video && isActive && showVideo && (
+									<motion.div
+										className="card__video"
+										initial={{
+											opacity: 0,
+										}}
+										animate={{
+											opacity: 1,
+										}}
+										transition={{
+											duration: 0.3,
+											ease: 'easeOut',
+										}}
+									>
+										<motion.div
+											className="card__video-bg"
+											initial={{
+												opacity: 0,
+											}}
+											animate={{
+												opacity: 1,
+											}}
+											transition={{
+												duration: 0.3,
+												ease: 'easeOut',
+											}}
+										/>
+										<ReactVideo
+											src={video.src}
+											options={{
+												playing: isActive ?? false,
+												width: 488,
+												height: 275,
+											}}
+										/>
+										<motion.button
+											className="card__close"
+											initial={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											transition={{ duration: 0.3, ease: 'easeOut' }}
+											onClick={onCloseVideo}
+										>
+											<span className="sr-only">Close dropdown</span>
+											<Image
+												className="overlay__close-img"
+												src={imgIconClose.src}
+												width={imgIconClose.width}
+												height={imgIconClose.height}
+												alt=""
+												aria-hidden="true"
+											/>
+										</motion.button>
+									</motion.div>
 								)}
 							</div>
 						</div>
@@ -488,7 +567,7 @@ export function CarouselCardsOverlay(props: CarouselCardsOverlayProps) {
 	return (
 		<div
 			className={classNames(
-				`overlay fixed top-0 left-0 flex justify-center items-center w-full h-full`,
+				`overlay`,
 				isActive && src && 'is-active',
 				className
 			)}
