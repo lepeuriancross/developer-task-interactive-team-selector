@@ -203,7 +203,7 @@ export default function CarouselCards(props: CarouselCardsProps) {
 			>
 				<div className="carousel__dropdown px-6 lg:hidden">
 					<button
-						className="carousel__dropdown-button flex justify-between items-center w-full border-2 rounded-[8px] px-4 py-2 font-button font-normal text-[18px] leading-[27px] bg-transparent transition-colors duration-300 ease-out border-blue lg:hover:bg-blue"
+						className="carousel__dropdown-button flex justify-between items-center w-full border-2 rounded-[8px] px-4 py-2 font-button font-normal text-[18px] leading-[27px] bg-transparent transition-colors duration-300 ease-out select-none border-blue lg:hover:bg-blue"
 						type="button"
 						onClick={openDropdown}
 					>
@@ -231,7 +231,7 @@ export default function CarouselCards(props: CarouselCardsProps) {
 						>
 							<button
 								className={classNames(
-									`carousel__button border rounded-[8px] px-3 pt-1 font-light text-[20px] leading-[27px] transition-colors duration-300 ease-out`,
+									`carousel__button border rounded-[8px] px-3 pt-1 font-light text-[20px] leading-[27px] transition-colors duration-300 ease-out select-none`,
 									c === cardCurrent
 										? `bg-blue border-blue text-white`
 										: 'is-active bg-transparent border-gray text-gray lg:hover:bg-blue lg:hover:border-blue lg:hover:text-white'
@@ -288,7 +288,7 @@ export default function CarouselCards(props: CarouselCardsProps) {
 						>
 							<button
 								className={classNames(
-									`carousel__button py-2 text-[16px]`,
+									`carousel__button w-full py-2 text-[16px] text-left select-none`,
 									c === cardCurrent && 'text-blue'
 								)}
 								onClick={() => selectItem(c)}
@@ -375,7 +375,7 @@ export function CarouselCardsCard(props: CarouselCardsCardProps) {
 							{link && (
 								<div className="card__button-wrapper flex items-end grow">
 									<Link href={link.href} target={link.target}>
-										<button className="card__button border-2 rounded-[8px] px-4 py-2 font-button font-normal text-[18px] leading-[27px] bg-transparent transition-colors duration-300 ease-out border-blue text-blue lg:hover:bg-blue lg:hover:border-blue lg:hover:text-white">
+										<button className="card__button border-2 rounded-[8px] px-4 py-2 font-button font-normal text-[18px] leading-[27px] bg-transparent transition-colors duration-300 ease-out select-none border-blue text-blue lg:hover:bg-blue lg:hover:border-blue lg:hover:text-white">
 											<span className="card__button-text">
 												{link.name ?? 'Find jobs'}
 											</span>
@@ -401,7 +401,7 @@ export function CarouselCardsCard(props: CarouselCardsCardProps) {
 								)}
 								{video && (
 									<button
-										className="card__playbutton absolute z-30 top-0 left-0 flex justify-center items-center w-full h-full font-button font-normal cursor-pointer"
+										className="card__playbutton absolute z-30 top-0 left-0 flex justify-center items-center w-full h-full font-button font-normal cursor-pointer select-none"
 										type="button"
 										onClick={() => onClickVideo(video.src)}
 									>
@@ -475,7 +475,7 @@ export function CarouselCardsDropdown(props: CarouselCardsDropdownProps) {
 						{title}
 					</h3>
 					<button
-						className="dropdown__menu-close relative w-[42px] h-[42px] rounded-[8px] bg-gray/30"
+						className="dropdown__menu-close relative w-[42px] h-[42px] rounded-[8px] select-none bg-gray/30"
 						onClick={onClickClose}
 					>
 						<span className="sr-only">Close dropdown</span>

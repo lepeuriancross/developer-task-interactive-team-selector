@@ -33,6 +33,10 @@ p {
 	font-weight: inherit;
 }
 
+button {
+	user-select: none;
+}
+
 .gradient {
 	&-background {
 		background: linear-gradient(
@@ -246,6 +250,8 @@ p {
 	}
 
 	&__button {
+		width: 100%;
+		text-align: left;
 		cursor: pointer;
 
 		@media (max-width: $breakLg) {
